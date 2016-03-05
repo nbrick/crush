@@ -72,14 +72,16 @@ fn parseln(line: String) -> Result<Entry, String> {
 fn main() {
     let args: Vec<_> = env::args().collect();
 
-    assert!(args.len() == 2);
+    assert!(args.len() == 3);
     let ref filename = args[1];
+    let ref filter_tag = args[2];
     // Nightly: let [_, ref filename] = &args[..];
 
     println!("Opening <{}>.", filename);
 
     let fbf = BufReader::new(File::open(filename).unwrap());
     let entries = fbf.lines().map(|l| { parseln(l.unwrap()).unwrap() });
-    let travel_entries = entries.filter(|e| { e.tags.contains(&String::from("travel")) });
-    travel_entries.map(|e| { println!("{:?}", e) }).count();  // count() call consumes the iter.
+
+    let chosen_entries = entries.filter(|e| { e.tags.contains(filter_tag) });
+    chosen_entries.map(|e| { println!("{:?}", e) }).count();  // count() call consumes the iter.
 }
