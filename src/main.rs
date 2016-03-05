@@ -54,6 +54,11 @@ fn parseln(line: String) -> Result<Entry, String> {
 }
 
 
+fn sum_delta(entries: &Vec<Entry>) -> Delta {
+    Delta { pence: entries.iter().fold(0, |s, ref d| s + d.delta.pence) }
+}
+
+
 fn main() {
     let args: Vec<_> = env::args().collect();
 
@@ -78,6 +83,7 @@ fn main() {
             }
         }).map(|(_, ok_e)| { ok_e.unwrap() });
 
-    let chosen_entries = entries.filter(|e| { e.tags.contains(filter_tag) });
-    chosen_entries.map(|e| { println!("{:?}", e) }).count();  // count() call consumes the iter.
+    let chosen_entries: Vec<_> = entries.filter(|e| { e.tags.contains(filter_tag) }).collect();
+    for e in &chosen_entries { println!("{:?}", e); }
+    println!("Total: {:?} from {:?} entries", sum_delta(&chosen_entries), chosen_entries.len());
 }
