@@ -27,12 +27,6 @@ fn parseln(line: String) -> Result<Entry, String> {
         None => Err("Found no tokens"),
     });
 
-    match first_token.len() {
-        1 => (),
-        _ => return Err(String::from("First token is not a single character")),
-    }
-    let sign_literal = first_token.chars().nth(0).unwrap();  // Safe to unwrap because len == 1.
-
     let amount_token = try!(match tokens.next() {
         Some(t) => Ok(t),
         None => Err(String::from("Found no second token")),
@@ -43,10 +37,10 @@ fn parseln(line: String) -> Result<Entry, String> {
         Err(_) => Err("Failed to parse amount token"),
     });
 
-    let delta = try!(match sign_literal {
-        '+' => Ok(Delta { pence: amount }),
-        '-' => Ok(Delta { pence: -amount }),
-        _ => Err(String::from("First token was neither '+' or '-'")),
+    let delta = try!(match first_token {
+        "+" => Ok(Delta { pence: amount }),
+        "-" => Ok(Delta { pence: -amount }),
+        _ => Err(String::from("First token was neither \"+\" or \"-\"")),
     });
 
     // Remaining tokens are taken as tags.
