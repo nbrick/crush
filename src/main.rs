@@ -1,7 +1,6 @@
 use std::env;
 use std::fs::File;
-use std::io::BufReader;
-use std::io::BufRead;
+use std::io::{stderr, Write, BufRead, BufReader};
 use std::collections::HashSet;
 
 
@@ -66,15 +65,18 @@ fn main() {
     println!("Opening <{}>.", filename);
 
     let input = BufReader::new(File::open(filename).unwrap());
-    let entries = input.lines()
-        .map(|l| { l.expect("Failed to read input line") })
-        .map(|l| { parseln(l) })
-        .filter(|res_e| {
+    let entries = input.lines().enumerate()
+        .map(|(n, l)| { (n, l.expect("Failed to read input line")) })
+        .map(|(n, l)| { (n, parseln(l)) })
+        .filter(|&(ref n, ref res_e)| {
             match res_e {
                 &Ok(_) => true,
-                &Err(ref err) => { println!("{}", err); false },
+                &Err(ref err) => {
+                    writeln!(&mut stderr(), "crush@{}:{}: {}", filename, n+1, err).unwrap();
+                    false
+                },
             }
-        }).map(|ok_e| { ok_e.unwrap() });
+        }).map(|(_, ok_e)| { ok_e.unwrap() });
 
     let chosen_entries = entries.filter(|e| { e.tags.contains(filter_tag) });
     chosen_entries.map(|e| { println!("{:?}", e) }).count();  // count() call consumes the iter.
