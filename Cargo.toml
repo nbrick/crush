@@ -1,0 +1,6 @@
+[package]
+name = "crush"
+version = "0.1.0"
+authors = ["Nic Bricknell <nebricks@gmail.com>"]
+
+[dependencies]
