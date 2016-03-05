@@ -2,6 +2,7 @@ use std::env;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::BufRead;
+use std::collections::HashSet;
 
 
 #[derive(Debug)]
@@ -40,7 +41,7 @@ impl Amount {
 struct Entry {
     sign: Sign,
     amount: Amount,  // pence
-    tags: Vec<String>,
+    tags: HashSet<String>,
 }
 
 
