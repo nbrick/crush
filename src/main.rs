@@ -71,9 +71,10 @@ fn parseln(line: String) -> Result<Entry, String> {
 
 fn main() {
     let args: Vec<_> = env::args().collect();
-    assert!(args.len() == 2);
 
+    assert!(args.len() == 2);
     let ref filename = args[1];
+    // Nightly: let [_, ref filename] = &args[..];
 
     println!("Opening <{}>.", filename);
 
