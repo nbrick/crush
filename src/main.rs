@@ -78,8 +78,7 @@ fn main() {
     println!("Opening <{}>.", filename);
 
     let fbf = BufReader::new(File::open(filename).unwrap());
-    for line in fbf.lines() {
-        let entry = parseln(line.unwrap()).unwrap();
-        println!("{:?}", entry);
-    }
+    let entries = fbf.lines().map(|l| { parseln(l.unwrap()).unwrap() });
+    let travel_entries = entries.filter(|e| { e.tags.contains(&String::from("travel")) });
+    travel_entries.map(|e| { println!("{:?}", e) }).count();  // count() call consumes the iter.
 }
