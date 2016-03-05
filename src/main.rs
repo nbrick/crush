@@ -57,11 +57,7 @@ fn main() {
     let args: Vec<_> = env::args().collect();
 
     assert!(args.len() == 3);
-    let ref filename = {
-        let mut filename = args[1].clone();
-        filename.push_str(".delta");
-        filename
-    };
+    let ref filename = args[1];
     let ref filter_tag = args[2];
     // Nightly: let [_, ref filename] = &args[..];
 

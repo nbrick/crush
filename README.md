@@ -6,5 +6,5 @@
 
 For instance:
 ```
-cargo run sample/april travel
+cargo run sample/april.delta travel
 ```
